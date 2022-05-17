@@ -4,6 +4,7 @@ import RadioButtonsPage from "../../pageObjects/RadioButtonsPage";
 import WebTablesPage from "../../pageObjects/WebTablesPage";
 import ButtonsPage from "../../pageObjects/ButtonsPage";
 import LinksPage from "../../pageObjects/LinksPage";
+import SelectablesPage from "../../pageObjects/SelectablesPage";
 
 context("Elements Page", () => {
   context("Text box scenarios", () => {
@@ -184,10 +185,97 @@ context("Elements Page", () => {
       LinksPage.visit();
     });
 
-    it.only("API intercepting", () => {
+    it("API intercepting", () => {
       // cy.intercept("GET", "created", { statusCode: 400 });
       LinksPage.createdLink.click();
       LinksPage.linkResponse.should("contain", "201");
     });
   });
+
+  context ("Selectable Page", () => {
+    context("Select fields scenarious", () => {
+      beforeEach(() => {
+        SelectablesPage.visit();
+      });
+
+      it("Clicking on select fields", () => {
+        //click on selection elements
+        SelectablesPage.selectableElement
+        .contains('Cras justo odio')
+        .click();
+
+        SelectablesPage.selectableElement
+        .contains('Morbi leo risus')
+        .click();
+        //validate that clicked elements are active
+        SelectablesPage.selectableElement
+        .invoke('attr', 'class')
+        .should('contain', 'active');
+        //validate that elements did not change state after two others were clicked
+        SelectablesPage.selectableElement
+        .contains('Porta ac consectetur ac')
+        .invoke('attr', 'class')
+        .should('equal', 'mt-2 list-group-item list-group-item-action');
+
+        SelectablesPage.selectableElement
+        .contains('Dapibus ac facilisis in')
+        .invoke('attr', 'class')
+        .should('equal', 'mt-2 list-group-item list-group-item-action');
+      });
+
+      it.only("Clicking on select fields in grid section", () => {
+        //go to grid tab
+        SelectablesPage.gridTab.click();
+
+        //click on “Two”, “Four”, “Six” un “Eight”
+         //validate that clicked fields are active
+        SelectablesPage.selectableElement
+        .contains('Two')
+        .click()
+        .invoke('attr', 'class')
+        .should('contain', 'active');
+        SelectablesPage.selectableElement
+        .contains('Four')
+        .click()
+        .invoke('attr', 'class')
+        .should('contain', 'active');
+        SelectablesPage.selectableElement
+        .contains('Six')
+        .click()
+        .invoke('attr', 'class')
+        .should('contain', 'active');
+        SelectablesPage.selectableElement
+        .contains('Eight')
+        .click()
+        .invoke('attr', 'class')
+        .should('contain', 'active');
+
+        
+        //validate that other fields did not change state to active
+        SelectablesPage.selectableElement
+        .contains('One')
+        .invoke('attr', 'class')
+        .should('equal', 'list-group-item list-group-item-action');
+        SelectablesPage.selectableElement
+        .contains('Three')
+        .invoke('attr', 'class')
+        .should('equal', 'list-group-item list-group-item-action');
+        SelectablesPage.selectableElement
+        .contains('Five')
+        .invoke('attr', 'class')
+        .should('equal', 'list-group-item list-group-item-action');
+        SelectablesPage.selectableElement
+        .contains('Seven')
+        .invoke('attr', 'class')
+        .should('equal', 'list-group-item list-group-item-action');
+        SelectablesPage.selectableElement
+        .contains('Nine')
+        .invoke('attr', 'class')
+        .should('equal', 'list-group-item list-group-item-action');
+
+      });
+    });
+  });
+
+
 });
